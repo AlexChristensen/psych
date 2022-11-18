@@ -590,7 +590,7 @@ FA.OLS <- function(Psi,S,nf) {
     rotated <- NULL
     if(rotate != "none") {if (nfactors > 1) {
 
-    if(n.rotations > 1) {rotated <- faRotations(loadings,r=r,n.rotations=n.rotations,rotate=rotate,hyper=hyper)
+    if(n.rotations > 1) {rotated <- faRotations(loadings,r=r,n.rotations=n.rotations,rotate=rotate,hyper=hyper,...)
              loadings=rotated$loadings
              Phi<- rotated$Phi
              rot.mat=rotated$rot.mat
