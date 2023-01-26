@@ -11,7 +11,6 @@ Suggests: psychTools, GPArotation, lavaan, lme4, Rcsdp, graph, knitr,
         Rgraphviz
 LazyData: yes
 ByteCompile: true
-VignetteBuilder: knitr
 URL: https://personality-project.org/r/psych/
         https://personality-project.org/r/psych-manual.pdf
 NeedsCompilation: no
