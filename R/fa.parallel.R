@@ -23,8 +23,8 @@ function(x,n.obs=NULL,fm="minres",fa="both",nfactors=1,main="Parallel Analysis S
        cor = {rx <- cor(x,use=use)},
        cov = {rx <- cov(x,use=use) 
               covar <- TRUE},
-       tet = {rx <- tetrachoric(x,correct=correct)$rho},
-       poly = {rx <- polychoric(x,correct=correct)$rho},
+       tet = {rx <- Turbofuns::PolychoricRM(x)$correlation},
+       poly = {rx <- Turbofuns::PolychoricRM(x)$correlation},
        mixed = {rx <- mixedCor(x,use=use,correct=correct)$rho},
        Yuleb = {rx <- YuleCor(x,,bonett=TRUE)$rho},
        YuleQ = {rx <- YuleCor(x,1)$rho},
@@ -46,8 +46,8 @@ function(x,n.obs=NULL,fm="minres",fa="both",nfactors=1,main="Parallel Analysis S
        cor = {rx <- cor(x,use=use)},
        cov = {rx <- cov(x,use=use) 
               covar <- TRUE},
-       tet = {rx <- tetrachoric(x,correct=correct)$rho},
-       poly = {rx <- polychoric(x,correct=correct)$rho},
+       tet = {rx <- Turbofuns::PolychoricRM(x)$correlation},
+       poly = {rx <- Turbofuns::PolychoricRM(x)$correlation},
        mixed = {rx <- mixedCor(x,use=use,correct=correct)$rho},
        Yuleb = {rx <- YuleCor(x,,bonett=TRUE)$rho},
        YuleQ = {rx <- YuleCor(x,1)$rho},
@@ -79,8 +79,8 @@ function(x,n.obs=NULL,fm="minres",fa="both",nfactors=1,main="Parallel Analysis S
        cor = {C <- cor(sampledata,use=use)},
        cov = {C <- cov(sampledata,use=use) 
               covar <- TRUE},
-       tet = {C <- tetrachoric(sampledata,correct=correct)$rho},
-       poly = {C <- polychoric(sampledata,correct=correct)$rho},
+       tet = {C <- Turbofuns::PolychoricRM(sampledata)$correlation},
+       poly = {C <- Turbofuns::PolychoricRM(sampledata)$correlation},
        mixed = {C <- mixedCor(sampledata,use=use,correct=correct)$rho},
        Yuleb = {C <- YuleCor(sampledata,,bonett=TRUE)$rho},
        YuleQ = {C <- YuleCor(sampledata,1)$rho},
