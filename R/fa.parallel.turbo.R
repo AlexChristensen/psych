@@ -14,6 +14,12 @@ fa.parallel.turbo <- function(
   # Ensure data is matrix
   data <- as.matrix(x)
   
+  # Obtain number of variables
+  nvariables <- ncol(data)
+  
+  # Obtain number of observations
+  nsub <- nrow(data)
+  
   # Obtain correlations
   rx <- switch(
     cor,
@@ -42,9 +48,6 @@ fa.parallel.turbo <- function(
     sim = vector("list", n.iter),
     sim.fa = vector("list", n.iter)
   )
-  
-  # Obtain number of variables
-  nvariables <- ncol(data)
   
   # Perform resampling
   templist <- lapply(1:n.iter, function(XX){
