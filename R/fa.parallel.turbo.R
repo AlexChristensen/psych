@@ -126,7 +126,9 @@ fa.parallel.turbo <- function(
     ncomp = pc.test,
     values = values,
     values_mean = values.sim.mean,
-    values_quant = values.ci
+    values_quant = values.ci,
+    pc.values = valuesx,
+    fa.values = fa.valuesx
   )
   
   # Return results
