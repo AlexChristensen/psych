@@ -29,7 +29,19 @@ fa.parallel.turbo <- function(
   )
   
   # Obtain eigenvalues
-  valuesx  <- eigen(rx)$values #these are the PC values
+  valuesx <- try(
+    eigen(rx)$values, # these are the PC values
+    silent = TRUE
+  )
+  
+  # Check for error
+  if(is(valuesx, "try-error")){
+    
+    # If error, use {qgraph}
+    rx <- qgraph::cor_auto(data, verbose = FALSE)
+    valuesx <- eigen(rx)$values
+  }
+  
   
   # Check for SMC
   if(isTRUE(SMC)){
@@ -40,14 +52,6 @@ fa.parallel.turbo <- function(
       fa(rx, nfactors = 1, rotate = "none", fm = fm, warnings = FALSE)$values
     )
   }  # t
-  
-  # Set up temporary list
-  temp <- list(
-    samp = vector("list", n.iter),
-    samp.fa = vector("list", n.iter),
-    sim = vector("list", n.iter),
-    sim.fa = vector("list", n.iter)
-  )
   
   # Perform resampling
   templist <- lapply(1:n.iter, function(XX){
