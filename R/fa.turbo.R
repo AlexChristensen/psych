@@ -16,7 +16,7 @@
 #15/1/15  Fixed the way we handle missing and imputation to actually work.
 #19/1/15 modified calls to rotation functions to meet CRAN specs using nameSpace
 
-"fa" <- 
+"fa.turbo" <- 
 function(r,nfactors=1,n.obs = NA,n.iter=1,rotate="oblimin",scores="regression", residuals=FALSE,SMC=TRUE,covar=FALSE,missing=FALSE,impute="none", min.err = .001,max.iter=50,symmetric=TRUE,warnings=TRUE,fm="minres",alpha=.1, p =.05,oblique.scores=FALSE,np.obs=NULL,use="pairwise",cor="cor",correct=.5,weight=NULL,n.rotations=1,hyper=.15,smooth=TRUE, ...) {
  cl <- match.call()
   if(isCorrelation(r)) {if(is.na(n.obs) && (n.iter >1)) stop("You must specify the number of subjects if giving a correlation matrix and doing confidence intervals")
@@ -24,7 +24,7 @@ function(r,nfactors=1,n.obs = NA,n.iter=1,rotate="oblimin",scores="regression", 
                         #in case we are using partial.r of class psych and partial.r   added 4/10/21  
                                  }
   
- f <- fac(r=r,nfactors=nfactors,n.obs=n.obs,rotate=rotate,scores=scores,residuals=residuals,SMC = SMC, covar=covar, missing=missing, impute=impute, min.err=min.err, max.iter=max.iter, symmetric=symmetric, warnings=warnings, fm=fm, alpha=alpha, oblique.scores=oblique.scores, np.obs=np.obs,use=use, cor=cor, correct=correct, weight=weight, n.rotations=n.rotations, hyper=hyper,smooth=smooth, ...=...) #call fa with the appropriate parameters
+ f <- fac.turbo(r=r,nfactors=nfactors,n.obs=n.obs,rotate=rotate,scores=scores,residuals=residuals,SMC = SMC, covar=covar, missing=missing, impute=impute, min.err=min.err, max.iter=max.iter, symmetric=symmetric, warnings=warnings, fm=fm, alpha=alpha, oblique.scores=oblique.scores, np.obs=np.obs,use=use, cor=cor, correct=correct, weight=weight, n.rotations=n.rotations, hyper=hyper,smooth=smooth, ...=...) #call fa with the appropriate parameters
  
  fl <- f$loadings  #this is the original
  
@@ -46,7 +46,7 @@ replicateslist <- parallel::mclapply(1:n.iter,function(x) {
                                       X <- matrix(rnorm(nvar * n.obs),n.obs)
                                       X <-  t(eX$vectors %*% diag(sqrt(pmax(eX$values, 0)), nvar) %*%  t(X))
                             } else {X <- r[sample(n.obs,n.obs,replace=TRUE),]}
-  fs <- fac(X,nfactors=nfactors,rotate=rotate,scores="none",SMC = SMC,missing=missing,impute=impute,min.err=min.err,max.iter=max.iter,symmetric=symmetric,warnings=warnings,fm=fm,alpha=alpha,oblique.scores=oblique.scores,np.obs=np.obs,use=use,cor=cor,correct=correct,n.rotations=n.rotations,hyper=hyper,smooth=smooth, ...=...) #call fa with the appropriate parameters
+  fs <- fac.turbo(X,nfactors=nfactors,rotate=rotate,scores="none",SMC = SMC,missing=missing,impute=impute,min.err=min.err,max.iter=max.iter,symmetric=symmetric,warnings=warnings,fm=fm,alpha=alpha,oblique.scores=oblique.scores,np.obs=np.obs,use=use,cor=cor,correct=correct,n.rotations=n.rotations,hyper=hyper,smooth=smooth, ...=...) #call fa with the appropriate parameters
   if(nfactors == 1) {replicates <- list(loadings=fs$loadings)} else  {
                     t.rot <- target.rot(fs$loadings,fl)
                 
@@ -109,7 +109,7 @@ return(results)
 ########################################################
 #the main function 
 
-"fac" <- 
+"fac.turbo" <- 
 function(r,nfactors=1,n.obs = NA,rotate="oblimin",scores="tenBerge",residuals=FALSE,SMC=TRUE,covar=FALSE,missing=FALSE,impute="median", min.err = .001,max.iter=50,symmetric=TRUE,warnings=TRUE,fm="minres",alpha=.1,oblique.scores=FALSE,np.obs=NULL,
 use="pairwise",cor="cor",
 correct=.5,weight=NULL,
@@ -166,7 +166,7 @@ smooth=TRUE, ...) {
  #modified June 7, 2009 to add gls fits
  #Modified December 11, 2009 to use first derivatives from formula rather than empirical.  This seriously improves the speed.
  #but does not seem to improve the accuracy of the minres/ols solution (note added April, 2017)
-     "fit" <- function(S,nf,fm,covar) {
+     "fit.turbo" <- function(S,nf,fm,covar) {
           if(is.logical(SMC)) {S.smc <- smc(S,covar)} else{ S.smc <- SMC }  #added this option, August 31, 2017
            upper <-  max(S.smc,1)  #Added Sept 11,2018  to handle case of covar , adjusted October 24 by adding 1  
            if((fm=="wls") | (fm =="gls") ) {S.inv <- solve(S)} else {S.inv <- NULL}
@@ -539,7 +539,7 @@ FA.OLS <- function(Psi,S,nf) {
           }
           
        if((fm == "wls") | (fm=="minres") |(fm=="minchi") | (fm=="gls") | (fm=="uls")|(fm== "ml")|(fm== "mle") | (fm=="ols") | (fm=="old.min")) { 
-       uls <- fit(r,nfactors,fm,covar=covar)
+       uls <- fit.turbo(r,nfactors,fm,covar=covar)
        
        e.values <- eigen(r)$values  #eigen values of pc: used for the summary stats --  
       result.res  <- uls$res
